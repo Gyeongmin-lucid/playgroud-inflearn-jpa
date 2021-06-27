@@ -1,15 +1,22 @@
 package inflearn.jpa.gwin;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+// Entity : 고유한 식별을 할수 있는 개념
+// Value : Entity를 통해서 접근하는 개념 (primitive)
 @Entity
 public class Account {
 
@@ -23,6 +30,10 @@ public class Account {
     private String username;
     private String password;
 
+    @OneToMany(mappedBy = "owner")
+    private Set<Study> studies = new HashSet<>();
+
+
     @Temporal(TemporalType.TIME)
     private Date created = new Date();
 
@@ -30,6 +41,25 @@ public class Account {
 
     @Transient
     private String no;
+
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "street", column = @Column(name = "home_street")),
+        @AttributeOverride(name = "city", column = @Column(name = "home_city")),
+        @AttributeOverride(name = "state", column = @Column(name = "home_state")),
+        @AttributeOverride(name = "zipCode", column = @Column(name = "home_zipCode")),
+    })
+    Address homeAddress;
+
+
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "street", column = @Column(name = "office_street")),
+        @AttributeOverride(name = "city", column = @Column(name = "office_city")),
+        @AttributeOverride(name = "state", column = @Column(name = "office_state")),
+        @AttributeOverride(name = "zipCode", column = @Column(name = "office_zipCode")),
+    })
+    Address officeAddress;
 
     public Long getId() {
         return id;
@@ -53,5 +83,22 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Study> getStudies() {
+        return studies;
+    }
+
+    public void setStudies(Set<Study> studies) {
+        this.studies = studies;
+    }
+
+    public void addStudy(Study study) {
+        this.getStudies().add(study);
+        study.setOwner(this);
+    }
+    public void removeStudy(Study study){
+        this.getStudies().remove(study);
+        study.setOwner(null);
     }
 }
