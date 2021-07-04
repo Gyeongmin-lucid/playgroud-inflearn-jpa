@@ -56,7 +56,7 @@ public class PostRepositoryTest {
 
         /* 2 */
         //when
-        List<Post> posts = postRepository.findAll();
+        List<Post> posts = postRepository.findAll(); // JpaRepository 에서 옴
 
         //then
         assertThat(posts.size()).isEqualTo(1);
