@@ -1,11 +1,16 @@
 package inflearn.jpa.gwin;
 
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GeneratorType;
 
+@Setter
+@Getter
 @Entity
 public class Comment {
     @Id
@@ -16,27 +21,7 @@ public class Comment {
     @ManyToOne
     private Post post;
 
-    public Long getId() {
-        return id;
-    }
+    private Date created;
+    private Integer likeCount = 1;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public Post getPost() {
-        return post;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
-    }
 }
