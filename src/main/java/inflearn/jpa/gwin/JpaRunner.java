@@ -14,6 +14,10 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+/* Transcation는 어떻게 동작할까?
+https://d2.naver.com/helloworld/407507
+ */
+
 @Component
 @Transactional
 public class JpaRunner implements ApplicationRunner {

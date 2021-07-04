@@ -7,6 +7,8 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.springframework.stereotype.Repository;
@@ -35,6 +37,8 @@ public class customRegister implements ImportBeanDefinitionRegistrar {
  ***/
 
 public interface PostRepository extends JpaRepository<Post, Long> {
+
+    Page<Post> findByTitleContains(String title, Pageable pagealbe);
 }
 
 //@Repository
