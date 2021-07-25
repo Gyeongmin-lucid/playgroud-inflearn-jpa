@@ -4,6 +4,9 @@ import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.stream.Stream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,9 +79,26 @@ public class CommentRepositoryTest {
 //        assertThat(comments_4.size()).isEqualTo(2);
 //        assertThat(comments_4).first().hasFieldOrPropertyWithValue("likeCount", 55);
 //
-        Page<Comment> comments_5 = commentRepository.findByCommentContainsIgnoreCase("Spring", pageable);
-        assertThat(comments_5.getNumberOfElements()).isEqualTo(2);
-        assertThat(comments_5).first().hasFieldOrPropertyWithValue("likeCount", 100);
+//        Page<Comment> comments_5 = commentRepository.findByCommentContainsIgnoreCase("Spring", pageable);
+//        assertThat(comments_5.getNumberOfElements()).isEqualTo(2);
+//        assertThat(comments_5).first().hasFieldOrPropertyWithValue("likeCount", 100);
+
+//        try(Stream<Comment> stream = commentRepository.findByCommentContainsIgnoreCase("Spring", pageable)){
+//            Comment firstComment = stream.findFirst().get();
+//            assertThat(firstComment.getLikeCount()).isEqualTo(100);
+//        }
+
+        //별로 추천하진 않음
+        // Async만 붙인다고 동작하는것은 아님 . @EnableAsync를 Application에 주입시켜줘야함
+        // Test 코드 작성이 매우 힘듬
+        Future<List<Comment>> future = commentRepository.findByCommentContainsIgnoreCase("Spring", pageable);
+        List<Comment> comments = null;
+        try {
+            comments = future.get();
+            comments.forEach(System.out::println);
+        } catch (InterruptedException | ExecutionException  e) {
+            e.printStackTrace();
+        }
     }
 
     private void createComment(int count, String comment) {

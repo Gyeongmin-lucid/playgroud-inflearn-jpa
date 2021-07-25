@@ -1,12 +1,15 @@
 package inflearn.jpa.gwin;
 
 import java.util.List;
+import java.util.concurrent.Future;
+import java.util.stream.Stream;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.RepositoryDefinition;
+import org.springframework.scheduling.annotation.Async;
 
 /* 내가 custom하게 Repository를 구성하고 싶다? */
 /* 기존 CRUD 매서드나 기타 쓰고싶은 메서드를 복사해서 가지고 오면 된다 */
@@ -53,7 +56,10 @@ public interface CommentRepository extends  MyRepository<Comment, Long>{
     List<Comment> findByCommentContains(String keyword);
     Page<Comment> findByLikeCountGreaterThanAndPost(int likeCount, Post post, Pageable pageable);
 
-    Page<Comment> findByCommentContainsIgnoreCase(String spring, Pageable pageable);
+//    Page<Comment> findByCommentContainsIgnoreCase(String spring, Pageable pageable);
+//    Stream<Comment> findByCommentContainsIgnoreCase(String spring, Pageable pageable);
+    @Async
+    Future<List<Comment>> findByCommentContainsIgnoreCase(String spring, Pageable pageable);
 
     List<Comment> findByCommentContainsIgnoreCaseAndLikeCountGreaterThan(String spring, int i);
 
